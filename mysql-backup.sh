@@ -18,13 +18,15 @@ s3_bucket="" # AWS S3 dir including bucket name e.g: "s3://your-bucket"
 s3_dir="" # The S3 directory to store your backups e.g: "your/directory"
 
 tmp_dir="" # The directory to store the dump before uploading to S3
+
+aws_path = "/usr/local/bin/aws" # The path to the aws command (can be found using 'which aws')
 ##################################################################
 
 
 timestamp=`date +%s`
 
-tmp_path="${tmp_dir}/${timestamp}.sql"
-s3_path="${s3_bucket}/${s3_dir}/${timestamp}.sql"
+tmp_path="${tmp_dir}/${mysql_d}_${timestamp}.sql"
+s3_path="${s3_bucket}/${s3_dir}/${mysql_d}_${timestamp}.sql"
 
 echo -e "${yellow}Dumping ${mysql_d} to ${tmp_path}"
 
@@ -53,7 +55,7 @@ else
 fi
 
 # Check AWS CLS is installed
-if ! type aws > /dev/null
+if ! type $aws_path > /dev/null
 then
   	echo -e "${red}aws is not installed"
   	echo -e "${red}You can install it using:"
@@ -67,7 +69,7 @@ fi
 
 
 # Check the bucket exists
-count=`aws s3 ls ${s3_bucket} | wc -l`
+count=`${aws_path} s3 ls ${s3_bucket} | wc -l`
 
 if [ $count -lt 1 ]
 then
@@ -85,10 +87,10 @@ echo -e "${yellow}Copying dump to S3"
 tput sgr0
 
 # Copy the file to S3
-aws s3 cp $tmp_path $s3_path
+$aws_path s3 cp $tmp_path $s3_path
 
 # Check the file was uploaded
-file_count=`aws s3 ls ${s3_path} | wc -l`
+file_count=`${aws_path} s3 ls ${s3_path} | wc -l`
 
 if [ $file_count -gt 0 ]
 then
