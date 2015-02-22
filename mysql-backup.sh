@@ -14,7 +14,7 @@ mysql_u="" # MySQL Username
 mysql_p="" # MySQL Password
 mysql_d="" # MySQL Database Name
 
-s3_bucket="" # AWS 3S dir including bucket name e.g: "s3://your-bucket"
+s3_bucket="" # AWS S3 dir including bucket name e.g: "s3://your-bucket"
 s3_dir="" # The S3 directory to store your backups e.g: "your/directory"
 
 tmp_dir="" # The directory to store the dump before uploading to S3
@@ -104,6 +104,9 @@ else
 
 	exit
 fi
+
+# Remove the local dump file
+rm $tmp_path
 
 # reset colours
 tput sgr0
