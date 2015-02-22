@@ -19,7 +19,7 @@ s3_dir="" # The S3 directory to store your backups e.g: "your/directory"
 
 tmp_dir="" # The directory to store the dump before uploading to S3
 
-aws_path = "/usr/local/bin/aws" # The path to the aws command (can be found using 'which aws')
+aws_path="/usr/local/bin/aws" # The path to the aws command (can be found using 'which aws')
 ##################################################################
 
 
